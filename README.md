@@ -6,11 +6,15 @@ npm run start:dev
 ```
 
 ## .Env file
-+ SERVER_PORT=[port]
-+ DATABASE_URI=[uri]
-+ DATABASE_NAME=[name]
-+ DATABASE_USER=[username]
-+ DATABASE_PASSWORD=[password]
+> SERVER_PORT=[port]
+> 
+> DATABASE_URI=[uri]
+> 
+> DATABASE_NAME=[name]
+> 
+> DATABASE_USER=[username]
+> 
+> DATABASE_PASSWORD=[password]
 
 ## Users
 |           |Endpoint                                | Description|
