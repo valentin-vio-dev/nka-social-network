@@ -9,3 +9,9 @@ module.exports.createUser = {
     notEmpty: {},
   },
 };
+
+module.exports.deleteUser = {
+  id: {
+    in: ["params"],
+  },
+};

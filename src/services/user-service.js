@@ -19,15 +19,31 @@ module.exports.getAll = async () => {
 module.exports.add = async (user) => {
   try {
     const res = await neo4j.write(
-      "CREATE (n:User { id: randomUUID(), username: $usernameParam, firstname: $firstnameParam, lastname: $lastnameParam}) RETURN n",
+      "CREATE (n:User { id: randomUUID(), username: $username, firstname: $firstname, lastname: $lastname}) RETURN n",
       {
-        usernameParam: user.username,
-        firstnameParam: user.firstname,
-        lastnameParam: user.lastname,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
       }
     );
-    console.log(res);
     return res.records[0].get("n").properties;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+module.exports.delete = async (id) => {
+  try {
+    const res = await neo4j.write("MATCH (n: User {id: $id}) DETACH DELETE n", {
+      id,
+    });
+
+    if (res.records.length < 1) {
+      throw new Error("User not found!");
+    }
+
+    return null;
   } catch (err) {
     console.log(err);
     throw err;
