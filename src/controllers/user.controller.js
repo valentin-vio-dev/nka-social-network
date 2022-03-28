@@ -1,6 +1,6 @@
 const { checkSchema, validationResult } = require("express-validator");
-const userSchemas = require("../schemas/user-schemas");
-const userService = require("../services/user-service");
+const userSchemas = require("../schemas/user.schemas");
+const userService = require("../services/user.service");
 const responses = require("../utils/custom-responses");
 
 module.exports.getAll = (req, res) => {

@@ -1,4 +1,4 @@
-const neo4j = require("../database/database-neo4j");
+const neo4j = require("../database/database.neo4j");
 
 module.exports.getAll = async () => {
   try {
