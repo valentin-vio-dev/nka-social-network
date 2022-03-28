@@ -2,7 +2,7 @@ const neo4j = require("../database/database.neo4j");
 
 module.exports.getAll = async () => {
   try {
-    const res = await neo4j.read("MATCH (n) RETURN n", null);
+    const res = await neo4j.read("MATCH (n:User) RETURN n", null);
     const users = res.records.map((row) => {
       return row.get("n").properties;
     });
@@ -25,11 +25,7 @@ module.exports.add = async (user) => {
 
     const res = await neo4j.write(
       "CREATE (n:User { id: randomUUID(), username: $username, firstname: $firstname, lastname: $lastname }) RETURN n",
-      {
-        username: user.username,
-        firstname: user.firstname,
-        lastname: user.lastname,
-      }
+      user
     );
     return res.records[0].get("n").properties;
   } catch (err) {
@@ -44,7 +40,7 @@ module.exports.delete = async (id) => {
       id,
     });
 
-    if (res.records.length < 1) {
+    if (!res.summary.updateStatistics._containsUpdates) {
       throw new Error("User not found!");
     }
 
@@ -56,7 +52,7 @@ module.exports.delete = async (id) => {
 };
 
 const userExists = async (user) => {
-  const exists = await neo4j.write(
+  const exists = await neo4j.read(
     "MATCH (n:User { username: $username }) RETURN n",
     {
       username: user.username,

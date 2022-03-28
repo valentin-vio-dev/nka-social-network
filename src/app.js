@@ -12,5 +12,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/api/users", require("./routes/user.routes"));
+app.use("/api/groups", require("./routes/group.routes"));
 
 module.exports = app;
