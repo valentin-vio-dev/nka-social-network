@@ -1,7 +1,9 @@
 # NKA - Social network
 
-+ npm install
-+ npm run start:dev
+```
+npm install
+npm run start:dev
+```
 
 ## .Env file
 + SERVER_PORT=[port]
