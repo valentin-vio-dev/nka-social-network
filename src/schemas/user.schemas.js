@@ -1,12 +1,18 @@
 module.exports.createUser = {
   username: {
-    notEmpty: {},
+    notEmpty: {
+      errorMessage: "Username is empty!",
+    },
   },
   firstname: {
-    notEmpty: {},
+    notEmpty: {
+      errorMessage: "Firstname is empty!",
+    },
   },
   lastname: {
-    notEmpty: {},
+    notEmpty: {
+      errorMessage: "Lastname is empty!",
+    },
   },
 };
 

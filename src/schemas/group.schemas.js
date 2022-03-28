@@ -1,6 +1,8 @@
 module.exports.createGroup = {
   name: {
-    notEmpty: {},
+    notEmpty: {
+      errorMessage: "Name is empty!",
+    },
   },
 };
 
