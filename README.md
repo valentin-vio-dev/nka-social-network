@@ -1,4 +1,4 @@
-# nka-social-network
+# NKA - Social network
 
 + npm install
 + npm run start:dev
