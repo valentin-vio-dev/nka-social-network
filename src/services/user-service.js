@@ -18,8 +18,13 @@ module.exports.getAll = async () => {
 
 module.exports.add = async (user) => {
   try {
+    const exists = await userExists(user);
+    if (exists) {
+      throw new Error("User already exists!");
+    }
+
     const res = await neo4j.write(
-      "CREATE (n:User { id: randomUUID(), username: $username, firstname: $firstname, lastname: $lastname}) RETURN n",
+      "CREATE (n:User { id: randomUUID(), username: $username, firstname: $firstname, lastname: $lastname }) RETURN n",
       {
         username: user.username,
         firstname: user.firstname,
@@ -48,4 +53,18 @@ module.exports.delete = async (id) => {
     console.log(err);
     throw err;
   }
+};
+
+const userExists = async (user) => {
+  const exists = await neo4j.write(
+    "MATCH (n:User { username: $username }) RETURN n",
+    {
+      username: user.username,
+    }
+  );
+
+  if (exists.records.length > 0) {
+    return true;
+  }
+  return false;
 };
