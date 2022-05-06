@@ -25,6 +25,7 @@ module.exports.add = async (req, res) => {
     username: req.body.username,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
+    birthDate: req.body.birthDate,
   };
 
   userService
@@ -47,7 +48,7 @@ module.exports.delete = async (req, res) => {
   userService
     .delete(req.params.id)
     .then(() => {
-      res.status(200).send();
+      res.status(204).send();
     })
     .catch((err) => {
       res.status(400).send(responses.error(err.message));

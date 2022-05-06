@@ -14,6 +14,11 @@ module.exports.createUser = {
       errorMessage: "Lastname is empty!",
     },
   },
+  birthDate: {
+    notEmpty: {
+      errorMessage: "Birth date is empty!",
+    },
+  },
 };
 
 module.exports.deleteUser = {

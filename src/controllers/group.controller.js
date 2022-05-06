@@ -46,7 +46,7 @@ module.exports.delete = async (req, res) => {
   groupService
     .delete(req.params.id)
     .then(() => {
-      res.status(200).send();
+      res.status(204).send();
     })
     .catch((err) => {
       res.status(400).send(responses.error(err.message));
