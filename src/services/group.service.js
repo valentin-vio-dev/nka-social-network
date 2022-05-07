@@ -1,7 +1,7 @@
 const neo4j = require("../database/database.neo4j");
 
 module.exports.getAll = async () => {
-  const res = await neo4j.read("MATCH (n:Group) RETURN n", null);
+  const res = await neo4j.read("MATCH (n:GROUP) RETURN n", null);
   const groups = res.records.map((row) => {
     return row.get("n").properties;
   });
@@ -19,14 +19,14 @@ module.exports.add = async (group) => {
   }
 
   const res = await neo4j.write(
-    "CREATE (n:Group { id: randomUUID(), name: $name, membersCount: $membersCount }) RETURN n",
+    "CREATE (n:GROUP { id: randomUUID(), name: $name, membersCount: $membersCount }) RETURN n",
     group
   );
   return res.records[0].get("n").properties;
 };
 
 module.exports.delete = async (id) => {
-  const res = await neo4j.write("MATCH (n: Group {id: $id}) DETACH DELETE n", {
+  const res = await neo4j.write("MATCH (n: GROUP {id: $id}) DETACH DELETE n", {
     id,
   });
 
@@ -38,7 +38,7 @@ module.exports.delete = async (id) => {
 };
 
 const groupExists = async (group) => {
-  const exists = await neo4j.read("MATCH (n:Group { name: $name }) RETURN n", {
+  const exists = await neo4j.read("MATCH (n:GROUP { name: $name }) RETURN n", {
     name: group.name,
   });
 

@@ -7,23 +7,41 @@ module.exports.add = async (friendship) => {
   }
 
   const res = await neo4j.write(
-    `MATCH (a:User), (b:User) WHERE a.id = $id AND b.id = $other CREATE (a)-[r: FRIEND]->(b) RETURN a, b`,
+    `MATCH (a:USER), (b:USER) WHERE a.id = $id AND b.id = $otherId CREATE (a)-[r: FRIEND_OF]->(b), (a)<-[: FRIEND_OF]-(b) RETURN r;`,
     {
       id: friendship.id,
-      other: friendship.other,
+      otherId: friendship.otherId,
     }
   );
+
   return res;
 };
 
-const friendshipExists = async (group) => {
-  const exists = await neo4j.read("MATCH (n:Group { name: $name }) RETURN n", {
-    id: friendship.id,
-    other: friendship.other,
-  });
-
-  if (exists.records.length > 0) {
-    return true;
+module.exports.delete = async (friendship) => {
+  const exists = await friendshipExists(friendship);
+  if (!exists) {
+    throw new Error("Friendship not exists!");
   }
-  return false;
+
+  const res = await neo4j.write(
+    `MATCH (a:USER {id: $id})-[r: FRIEND_OF]-(b:USER {id: $otherId}) DETACH DELETE r;`,
+    {
+      id: friendship.id,
+      otherId: friendship.otherId,
+    }
+  );
+
+  return res;
+};
+
+const friendshipExists = async (friendship) => {
+  const exists = await neo4j.read(
+    "RETURN EXISTS( (:USER {id: $id})-[:FRIEND_OF]-(:USER {id: $otherId}) );",
+    {
+      id: friendship.id,
+      otherId: friendship.otherId,
+    }
+  );
+
+  return exists.records[0]._fields[0];
 };

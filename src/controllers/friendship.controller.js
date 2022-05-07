@@ -12,7 +12,7 @@ module.exports.add = async (req, res) => {
 
   const friendship = {
     id: req.body.id,
-    other: req.body.other,
+    otherId: req.body.otherId,
   };
 
   friendshipService
@@ -26,18 +26,23 @@ module.exports.add = async (req, res) => {
 };
 
 module.exports.delete = async (req, res) => {
-  /*/await checkSchema(groupSchemas.deleteGroup).run(req);
+  await checkSchema(friendshipSchemas.deleteFriendship).run(req);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send(responses.error(errors.array()[0].msg));
   }
 
-  groupService
-    .delete(req.params.id)
+  const friendship = {
+    id: req.body.id,
+    otherId: req.body.otherId,
+  };
+
+  friendshipService
+    .delete(friendship)
     .then(() => {
       res.status(204).send();
     })
     .catch((err) => {
       res.status(400).send(responses.error(err.message));
-    });*/
+    });
 };
