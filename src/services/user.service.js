@@ -37,13 +37,24 @@ module.exports.delete = async (id) => {
   return null;
 };
 
-const userExistsByUsername = async (user) => {
+module.exports.userExistsByUsername = async ({ username }) => {
   const exists = await neo4j.read(
     "MATCH (n:USER { username: $username }) RETURN n",
     {
-      username: user.username,
+      username,
     }
   );
+
+  if (exists.records.length > 0) {
+    return true;
+  }
+  return false;
+};
+
+module.exports.userExistsById = async ({ id }) => {
+  const exists = await neo4j.read("MATCH (n:USER { id: $id }) RETURN n", {
+    id,
+  });
 
   if (exists.records.length > 0) {
     return true;

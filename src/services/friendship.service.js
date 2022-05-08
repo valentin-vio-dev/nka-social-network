@@ -1,7 +1,8 @@
 const neo4j = require("../database/database.neo4j");
+const userService = require("../services/user.service");
 
 module.exports.add = async (friendship) => {
-  const exists = await friendshipExists(friendship);
+  const exists = await friendshipExistsByIds(friendship);
   if (exists) {
     throw new Error("Friendship already exists!");
   }
@@ -34,12 +35,22 @@ module.exports.delete = async (friendship) => {
   return res;
 };
 
-const friendshipExists = async (friendship) => {
+module.exports.getAllById = async (id) => {
+  const exists = userService.userExistsById({ id });
+  if (!exists) {
+    throw new Error("User does not have any friendship!");
+  }
+
+  const res = await neo4j.read("MATCH");
+  // TODO
+};
+
+const friendshipExistsByIds = async ({ id, otherId }) => {
   const exists = await neo4j.read(
     "RETURN EXISTS( (:USER {id: $id})-[:FRIEND_OF]-(:USER {id: $otherId}) );",
     {
-      id: friendship.id,
-      otherId: friendship.otherId,
+      id,
+      otherId,
     }
   );
 

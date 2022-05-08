@@ -23,3 +23,9 @@ module.exports.deleteFriendship = {
     },
   },
 };
+
+module.exports.getAllById = {
+  id: {
+    in: ["params"],
+  },
+};

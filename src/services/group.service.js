@@ -13,7 +13,7 @@ module.exports.getAll = async () => {
 };
 
 module.exports.add = async (group) => {
-  const exists = await groupExists(group);
+  const exists = await groupExistsByName(group);
   if (exists) {
     throw new Error("Group already exists!");
   }
@@ -25,7 +25,7 @@ module.exports.add = async (group) => {
   return res.records[0].get("n").properties;
 };
 
-module.exports.delete = async (id) => {
+module.exports.delete = async ({ id }) => {
   const res = await neo4j.write("MATCH (n: GROUP {id: $id}) DETACH DELETE n", {
     id,
   });
@@ -37,9 +37,9 @@ module.exports.delete = async (id) => {
   return null;
 };
 
-const groupExists = async (group) => {
+const groupExistsByName = async ({ name }) => {
   const exists = await neo4j.read("MATCH (n:GROUP { name: $name }) RETURN n", {
-    name: group.name,
+    name,
   });
 
   if (exists.records.length > 0) {

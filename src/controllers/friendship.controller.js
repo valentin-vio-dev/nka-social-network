@@ -46,3 +46,20 @@ module.exports.delete = async (req, res) => {
       res.status(400).send(responses.error(err.message));
     });
 };
+
+module.exports.getAllById = async (req, res) => {
+  await checkSchema(friendshipSchemas.getAllById).run(req);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send(responses.error(errors.array()[0].msg));
+  }
+
+  friendshipService
+    .getAllById(req.params.id)
+    .then(() => {
+      res.status(200).send();
+    })
+    .catch((err) => {
+      res.status(400).send(responses.error(err.message));
+    });
+};
