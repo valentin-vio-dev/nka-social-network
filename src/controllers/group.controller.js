@@ -24,6 +24,7 @@ module.exports.add = async (req, res) => {
   const group = {
     name: req.body.name,
     membersCount: 0,
+    uid: req.body.uid,
   };
 
   groupService

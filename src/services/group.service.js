@@ -1,4 +1,5 @@
 const neo4j = require("../database/database.neo4j");
+const userService = require("../services/user.service");
 
 module.exports.getAll = async () => {
   const res = await neo4j.read("MATCH (n:GROUP) RETURN n", null);
@@ -18,14 +19,19 @@ module.exports.add = async (group) => {
     throw new Error("Group already exists!");
   }
 
+  const existsUser = await userService.userExistsById({ id: group.uid });
+  if (!existsUser) {
+    throw new Error("User does not exist!");
+  }
+
   const res = await neo4j.write(
-    "CREATE (n:GROUP { id: randomUUID(), name: $name, membersCount: $membersCount }) RETURN n",
+    "CREATE (n:GROUP { id: randomUUID(), name: $name, membersCount: $membersCount, uid: $uid }) RETURN n",
     group
   );
   return res.records[0].get("n").properties;
 };
 
-module.exports.delete = async ({ id }) => {
+module.exports.delete = async (id) => {
   const res = await neo4j.write("MATCH (n: GROUP {id: $id}) DETACH DELETE n", {
     id,
   });

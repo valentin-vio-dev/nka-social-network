@@ -4,6 +4,11 @@ module.exports.createGroup = {
       errorMessage: "Name is empty!",
     },
   },
+  uid: {
+    notEmpty: {
+      errorMessage: "User id is required!",
+    },
+  },
 };
 
 module.exports.deleteGroup = {
