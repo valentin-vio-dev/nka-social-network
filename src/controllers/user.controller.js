@@ -54,3 +54,55 @@ module.exports.delete = async (req, res) => {
       res.status(400).send(responses.error(err.message));
     });
 };
+
+module.exports.registrate = async (req, res) => {
+  await checkSchema(userSchemas.registrate).run(req);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send(responses.error(errors.array()[0].msg));
+  }
+
+  if (req.body.password !== req.body.passwordAgain) {
+    return res.status(400).send(responses.error("Passwords do not match!"));
+  }
+
+  const user = {
+    username: req.body.username,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    birthDate: req.body.birthDate,
+    password: req.body.password,
+  };
+
+  userService
+    .registrate(user)
+    .then((result) => {
+      res.status(201).send(responses.success(result, 201));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send(responses.error(err.message));
+    });
+};
+
+module.exports.login = async (req, res) => {
+  await checkSchema(userSchemas.login).run(req);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send(responses.error(errors.array()[0].msg));
+  }
+
+  const user = {
+    username: req.body.username,
+    password: req.body.password,
+  };
+
+  userService
+    .login(user.username, user.password)
+    .then((result) => {
+      res.status(201).send(responses.success(result, 201));
+    })
+    .catch((err) => {
+      res.status(400).send(responses.error(err.message));
+    });
+};
