@@ -14,5 +14,6 @@ app.use(cors());
 app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/groups", require("./routes/group.routes"));
 app.use("/api/friendship", require("./routes/friendship.routes"));
+app.use("/api/post", require("./routes/post.routes"));
 
 module.exports = app;
