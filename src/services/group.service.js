@@ -28,6 +28,9 @@ module.exports.add = async (group) => {
     "CREATE (n:GROUP { id: randomUUID(), name: $name, membersCount: $membersCount, uid: $uid }) RETURN n",
     group
   );
+
+  await this.addGroupMember({ group: group.name, uid: group.uid });
+
   return res.records[0].get("n").properties;
 };
 
@@ -52,4 +55,26 @@ const groupExistsByName = async ({ name }) => {
     return true;
   }
   return false;
+};
+
+module.exports.addGroupMember = async (data) => {
+  const exists = await groupExistsByName({ name: data.group });
+  if (!exists) {
+    throw new Error("Group does not exists!");
+  }
+
+  const existsUser = await userService.userExistsById({ id: data.uid });
+  if (!existsUser) {
+    throw new Error("User does not exist!");
+  }
+
+  const res = await neo4j.write(
+    `MATCH (a:USER), (b:GROUP) WHERE a.id = $uid AND b.name = $group CREATE (a)-[r: MEMBER_OF]->(b) RETURN r;`,
+    {
+      group: data.group,
+      uid: data.uid,
+    }
+  );
+
+  return res;
 };

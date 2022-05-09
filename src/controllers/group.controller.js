@@ -23,7 +23,7 @@ module.exports.add = async (req, res) => {
 
   const group = {
     name: req.body.name,
-    membersCount: 0,
+    membersCount: 1,
     uid: req.body.uid,
   };
 
@@ -48,6 +48,28 @@ module.exports.delete = async (req, res) => {
     .delete(req.params.id)
     .then(() => {
       res.status(204).send();
+    })
+    .catch((err) => {
+      res.status(400).send(responses.error(err.message));
+    });
+};
+
+module.exports.addMember = async (req, res) => {
+  await checkSchema(groupSchemas.addMember).run(req);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send(responses.error(errors.array()[0].msg));
+  }
+
+  const group = {
+    group: req.body.name,
+    uid: req.body.uid,
+  };
+
+  groupService
+    .addGroupMember(group)
+    .then((result) => {
+      res.status(201).send(responses.success(result, 201));
     })
     .catch((err) => {
       res.status(400).send(responses.error(err.message));
