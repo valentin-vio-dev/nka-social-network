@@ -14,7 +14,7 @@ module.exports.getAll = (req, res) => {
     });
 };
 
-/*module.exports.add = async (req, res) => {
+module.exports.add = async (req, res) => {
   await checkSchema(userSchemas.createUser).run(req);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -36,7 +36,7 @@ module.exports.getAll = (req, res) => {
     .catch((err) => {
       res.status(400).send(responses.error(err.message));
     });
-};*/
+};
 
 module.exports.delete = async (req, res) => {
   await checkSchema(userSchemas.deleteUser).run(req);
