@@ -1,4 +1,4 @@
-module.exports.createUser = {
+/*module.exports.createUser = {
   username: {
     notEmpty: {
       errorMessage: "Username is empty!",
@@ -19,7 +19,7 @@ module.exports.createUser = {
       errorMessage: "Birth date is empty!",
     },
   },
-};
+};*/
 
 module.exports.registrate = {
   username: {
